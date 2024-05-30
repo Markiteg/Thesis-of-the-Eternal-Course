@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4303041143682696569}
   m_Layer: 0
   m_Name: Sprite
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,9 +97,9 @@ GameObject:
   - component: {fileID: 2608374970073504431}
   - component: {fileID: 8671730403270143199}
   - component: {fileID: 5811363999423242589}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,8 +119,8 @@ Transform:
   m_Children:
   - {fileID: 4366352155068350369}
   - {fileID: 1630267019481985616}
-  - {fileID: 2431900365001047722}
   - {fileID: 7377201703858668885}
+  - {fileID: 4405003905260560911}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5004105855797918365
@@ -194,7 +194,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &8671730403270143199
 Animator:
   serializedVersion: 5
@@ -228,44 +228,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f52566a7e84b643b98277e3f44b109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  jumpForce: 0
-  TimeJump: 0
-  StartTimeJump: 0
-  StartJumpCount: 0
-  TimeBTWDash: 0
-  StartTimeBTWDash: 0
-  TimeAFTDash: 0
-  StartTimeAFTDash: 0
-  DashSpeed: 0
+  speed: 5
+  jumpForce: 5
+  TimeJump: 0.5
+  StartTimeJump: 0.5
+  StartJumpCount: 1
+  TimeBTWDash: -961.86035
+  StartTimeBTWDash: 0.5
+  TimeAFTDash: -962.1573
+  StartTimeAFTDash: 0.2
+  DashSpeed: 10
   TimeWallJump: 0
   StartTimeWallJump: 0
-  upDownSpeed: 0
-  SlideSpeed: 0
-  JumpWallTime: 0
-  jumpAngle: {x: 3.5, y: 10}
-  FixYSpeed: 0
-  timeBTWattack: 0
-  startTimeBTWAttack: 0
-  atkPos: {fileID: 0}
+  upDownSpeed: 2
+  SlideSpeed: -2
+  JumpWallTime: 0.2
+  jumpAngle: {x: 3.5, y: 5}
+  FixYSpeed: -20
+  timeBTWattack: -0.0011423295
+  startTimeBTWAttack: 0.3
+  atkPos: {fileID: 4405003905260560911}
   atkRange: 0
   enemy:
     serializedVersion: 2
-    m_Bits: 0
-  weaponDamage: 0
-  health: 0
+    m_Bits: 128
+  weaponDamage: 5
+  health: 10
   TimeBTWdmg: 0
   StartTimeBTWdmg: 0
-  TimeAFTAttack: 0
-  StartAFTAttack: 0
+  TimeAFTAttack: -0.0014963113
+  StartAFTAttack: 0.5
   AttackNum: 0
-  GOisGround: {fileID: 0}
+  GOisGround: {fileID: 6363585082004878197}
   GOIsCanStay: {fileID: 0}
-  GOIsWallLeft: {fileID: 0}
-  GOIsWallRight: {fileID: 0}
+  GOIsWallRight: {fileID: 9094026028950642362}
   Ground:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!1 &6363585082004878197
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,9 +274,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1630267019481985616}
+  - component: {fileID: 2912510573650787039}
   m_Layer: 0
   m_Name: GroundCheck
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -291,13 +291,48 @@ Transform:
   m_GameObject: {fileID: 6363585082004878197}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.004, y: -1.09, z: 0}
+  m_LocalPosition: {x: -0.002, y: -1.042, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7531040789957268325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6799638550333739033
+--- !u!58 &2912510573650787039
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6363585082004878197}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.1
+--- !u!1 &8244995257855339158
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -305,24 +340,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2431900365001047722}
+  - component: {fileID: 4405003905260560911}
   m_Layer: 0
-  m_Name: WallLeft
+  m_Name: AttackPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2431900365001047722
+--- !u!4 &4405003905260560911
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6799638550333739033}
+  m_GameObject: {fileID: 8244995257855339158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.776, y: 0.039, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -339,7 +374,7 @@ GameObject:
   - component: {fileID: 7377201703858668885}
   m_Layer: 0
   m_Name: WallRight
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

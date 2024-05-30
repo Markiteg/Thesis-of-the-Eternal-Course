@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
     private float StartDashCount = 1;
     private bool IsSite;
     private bool IsCanStay;
-    private bool IsWallLeft, IsWallRight;
+    private bool IsWallRight;
     private bool IsWall;
     private float GravityDev;
     private bool BlockMove = false;
@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
     private bool IsWallJumping = false;
     private bool IsDash = false;
     private bool IsAttack = false;
+    private bool IsEnemy = false;
 
 
     private Rigidbody2D rb;
@@ -60,7 +61,6 @@ public class Player : MonoBehaviour
 
     public GameObject GOisGround;
     public GameObject GOIsCanStay;
-    public GameObject GOIsWallLeft;
     public GameObject GOIsWallRight;
     public LayerMask Ground;
     private void Awake()
@@ -81,10 +81,13 @@ public class Player : MonoBehaviour
             gameObject.transform.position = new Vector2(0, 0);
         }
 
+        if (health <= 0)
+            Destroy(gameObject);
+
         if (IsSide)
-            sr.flipX = true;
+            gameObject.transform.localScale = new Vector2(-1, 1);
         else
-            sr.flipX = false;
+            gameObject.transform.localScale = new Vector2(1, 1);
 
         if (Input.GetKey(KeyCode.A)) // Walk in left
         {
@@ -146,7 +149,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (IsWallRight && !IsGround || IsWallLeft && !IsGround) //Check in wall
+        if (IsWallRight && !IsGround) //Check in wall
         {
             JumpCount = StartJumpCount;
             DashCount = StartDashCount;
@@ -186,19 +189,19 @@ public class Player : MonoBehaviour
         }
         else
             TimerJumpWall -= Time.deltaTime;
-        if (IsWallJumping && IsWallLeft)
+        if (IsWallJumping && IsWallRight)
         {
-            rb.velocity = new Vector2(jumpAngle.x, jumpAngle.y);
-        }
-        else if (IsWallJumping && IsWallRight)
-        {
-            rb.velocity = new Vector2(jumpAngle.x * -1, jumpAngle.y);
+            if (IsSide)
+                rb.velocity = new Vector2(jumpAngle.x, jumpAngle.y);
+            else
+                rb.velocity = new Vector2(jumpAngle.x * -1, jumpAngle.y);
         }
 
         IsGround = Physics2D.OverlapCircle(GOisGround.transform.position, 0.1f, Ground); //Check ground
         //IsCanStay = Physics2D.OverlapCircle(GOIsCanStay.transform.position, 0.5f, Ground); //Can stay or not
-        IsWallLeft = Physics2D.OverlapCircle(GOIsWallLeft.transform.position, 0.1f, Ground); //Check walls in left side
         IsWallRight = Physics2D.OverlapCircle(GOIsWallRight.transform.position, 0.1f, Ground); //Check walls in right side
+        IsEnemy = Physics2D.OverlapCircle(atkPos.transform.position, 0.5f, enemy);
+
 
         if (Input.GetKeyDown(KeyCode.Q) && TimeBTWDash <= 0) //Use dash
         {
@@ -239,7 +242,7 @@ public class Player : MonoBehaviour
         if (rb.velocity.y < FixYSpeed) //Fix speed in Y
             rb.velocity = new Vector2(rb.velocity.x, FixYSpeed);
 
-        if (Input.GetKey(KeyCode.F) && !IsGround && !IsWallLeft && !IsWallRight && rb.velocity.y < 0)
+        if (Input.GetKey(KeyCode.F) && !IsGround && !IsWallRight && rb.velocity.y < 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, -2);
         }
@@ -248,13 +251,16 @@ public class Player : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) && IsGround)
             {
-                if (AttackNum == 3)
+                if (AttackNum == 2)
                     AttackNum = 0;
                 AttackNum++;
                 IsAttack = true;
                 TimeAFTAttack = StartAFTAttack;
                 timeBTWattack = startTimeBTWAttack;
                 anim.SetInteger("AttackCount", AttackNum);
+
+                if (IsEnemy)
+                    Physics2D.OverlapCircle(atkPos.transform.position, 0.5f, enemy).GetComponent<Enemy>().Damage(weaponDamage);
             }
         }
         else
