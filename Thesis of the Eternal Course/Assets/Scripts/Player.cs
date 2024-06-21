@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     private bool IsDash = false;
     private bool IsAttack = false;
     private bool IsEnemy = false;
+    public static bool IsDialog = false;
 
 
     private Rigidbody2D rb;
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour
     public GameObject GOIsCanStay;
     public GameObject GOIsWallRight;
     public LayerMask Ground;
+    public LayerMask Dialog;
     private void Awake()
     {
         IsSide = true;
@@ -80,6 +83,12 @@ public class Player : MonoBehaviour
         {
             gameObject.transform.position = new Vector2(0, 0);
         }
+
+        IsGround = Physics2D.OverlapCircle(GOisGround.transform.position, 0.1f, Ground); //Check ground
+        //IsCanStay = Physics2D.OverlapCircle(GOIsCanStay.transform.position, 0.5f, Ground); //Can stay or not
+        IsWallRight = Physics2D.OverlapCircle(GOIsWallRight.transform.position, 0.1f, Ground); //Check walls in right side
+        IsEnemy = Physics2D.OverlapCircle(atkPos.transform.position, 0.5f, enemy);
+        IsDialog = Physics2D.OverlapCircle(gameObject.transform.position, 0.5f, Dialog);
 
         if (health <= 0)
             Destroy(gameObject);
@@ -197,11 +206,13 @@ public class Player : MonoBehaviour
                 rb.velocity = new Vector2(jumpAngle.x * -1, jumpAngle.y);
         }
 
-        IsGround = Physics2D.OverlapCircle(GOisGround.transform.position, 0.1f, Ground); //Check ground
-        //IsCanStay = Physics2D.OverlapCircle(GOIsCanStay.transform.position, 0.5f, Ground); //Can stay or not
-        IsWallRight = Physics2D.OverlapCircle(GOIsWallRight.transform.position, 0.1f, Ground); //Check walls in right side
-        IsEnemy = Physics2D.OverlapCircle(atkPos.transform.position, 0.5f, enemy);
+        if (IsDialog && Input.GetKeyDown(KeyCode.E))//Активация диалогов(надо дороботать, как их различать, чтобы можно было бы ставить нормальный текст)
+        {
+            GameObject gm = Physics2D.OverlapCircle(gameObject.transform.position, 0.5f, Dialog).GetComponent<GameObject>();
 
+            if (gm.tag == "1")
+                ForUI.ActivatedDialog(1);
+        }
 
         if (Input.GetKeyDown(KeyCode.Q) && TimeBTWDash <= 0) //Use dash
         {
