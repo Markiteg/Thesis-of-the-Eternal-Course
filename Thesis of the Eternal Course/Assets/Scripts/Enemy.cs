@@ -29,11 +29,13 @@ public class Enemy : MonoBehaviour
     public LayerMask groundLayer;
     public GameObject GOisGround;
     public GameObject IsAttack;
+    private Animator anim;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -51,6 +53,11 @@ public class Enemy : MonoBehaviour
             TimeBTWdmg -= Time.deltaTime;
         if (TimeBTWAttack > 0)
             TimeBTWAttack -= Time.deltaTime;
+
+        if (!IsGround)
+            anim.SetBool("IsJump", true);
+        else
+            anim.SetBool("IsJump", false);
     }
 
     private void Attack()
@@ -97,12 +104,12 @@ public class Enemy : MonoBehaviour
 
             // Follow player
             rb.velocity = new Vector2(directionToPlayer.x * speed, rb.velocity.y);
-
+            
             if (directionToPlayer.x > 0)
                 transform.localScale = new Vector2(1, 1);
             else
                 transform.localScale = new Vector2(-1, 1);
-
+            anim.SetBool("IsRun", true);
             // Check ground
             IsGround = Physics2D.OverlapCircle(GOisGround.transform.position, 0.1f, groundLayer);
             // Jump Enemy
@@ -119,23 +126,26 @@ public class Enemy : MonoBehaviour
                 transform.Translate(Vector3.left * speed * Time.deltaTime);
                 TimeWalk -= Time.deltaTime;
                 transform.localScale = new Vector2(-1, 1);
+                anim.SetBool("IsRun", true);
             }
             else if (TimeWalk >= 0)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 TimeWalk -= Time.deltaTime;
+                anim.SetBool("IsRun", false);
             }
             else if (TimeWalk >= -1)
             {
                 transform.Translate(Vector3.right * speed * Time.deltaTime);
                 transform.localScale = new Vector2(1, 1);
-
                 TimeWalk -= Time.deltaTime;
+                anim.SetBool("IsRun", true);
             }
             else if (TimeWalk >= -1.5)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 TimeWalk -= Time.deltaTime;
+                anim.SetBool("IsRun", false);
             }
             else
                 TimeWalk = StartTimeWalk;
