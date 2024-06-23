@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -47,12 +48,18 @@ public class Enemy : MonoBehaviour
         MoveEnemy();
 
         if (health <= 0)
+        {
+            ForUI.EnemyCount--;
+            ForUI.Score += UnityEngine.Random.Range(10, 100);
             Destroy(gameObject);
+        }
         
         if (TimeBTWdmg > 0)
             TimeBTWdmg -= Time.deltaTime;
         if (TimeBTWAttack > 0)
+        {
             TimeBTWAttack -= Time.deltaTime;
+        }
 
         if (!IsGround)
             anim.SetBool("IsJump", true);
@@ -66,9 +73,12 @@ public class Enemy : MonoBehaviour
         {
             if (TimeBTWAttack <= 0)
             {
+                anim.SetBool("IsAttack", true);
                 Physics2D.OverlapCircle(IsAttack.transform.position, 0.5f, playerLayer).GetComponent<Player>().Damage(waeponDMG);
                 TimeBTWAttack = StartTimeBTWAttack;
             }
+            else
+                anim.SetBool("IsAttack", false);
         }
     }
 
@@ -76,16 +86,16 @@ public class Enemy : MonoBehaviour
     {
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
 
-        // Проверить, находится ли игрок в радиусе видимости
+        
         if (Vector2.Distance(transform.position, player.position) < visionRadius)
         {
             float angleToPlayer = Vector2.Angle(transform.right, directionToPlayer);
 
             if (angleToPlayer < visionAngle / 2)
             {
-                // Выполнить Raycast, чтобы проверить наличие препятствий
+                
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, visionRadius, ~obstacleLayer);
-                // Если Raycast попадает в объект игрока, то игрок в зоне видимости
+                
                 if (hit.collider != null && hit.collider.CompareTag("Player"))
                 {
                     isPlayerInSight = true;

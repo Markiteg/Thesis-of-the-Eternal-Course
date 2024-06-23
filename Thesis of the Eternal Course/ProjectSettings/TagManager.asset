@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Dialog
   - 1
+  - 2
+  - 3
   layers:
   - Default
   - TransparentFX
